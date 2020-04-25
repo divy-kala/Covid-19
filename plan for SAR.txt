@@ -1,0 +1,68 @@
+Steps:
+
+for modelling, need gamma and beta
+
+gamma is known
+
+beta can be found using R0 and gamma
+
+R0 can be found using generation time
+
+generation time is assumed to follow gamma distribution
+
+mean and shape parameter of gamma is estimated using data
+
+How? gridsearch over mean and shape parameter of gamma dist
+
+Get a mean and shape for the distribution and use it to generate generation time :)
+
+Estimate R0 from G using R0 package 
+
+Simulate the disease progression for the period which we observed new incidences and calc MSE
+
+Select the R0 that gave lowest MSE
+
+
+
+Design:
+
+Simulate_diesease_progression (beta, gamma, S, I, R, verbose):
+	#perhaps use desolve?
+	use scipy.integrate's odeint
+	return time series
+
+R Module for getting R0 from G
+
+Get_good_R0_and_simulate (time series data with S I R,verbose):
+	Gridsearch:
+		generate random mean, shape
+		Find R0 by calling R module
+		Simulate_disease_progression (beta (from R0), gamma(known), S,I,R)
+		
+		Calculate MSE
+	Return R0 with minimum MSE, time series of its simulation	
+
+
+	
+
+
+
+
+
+
+data(Germany.1918)
+mGT<-generation.time("gamma", c(2.45, 1.38))
+est.R0.ML(Germany.1918, mGT, begin=1, end=27, range=c(0.01,50))
+# Reproduction number estimate using  Maximum Likelihood  method.
+# R :  1.307222[ 1.236913 , 1.380156 ]
+res=est.R0.ML(Germany.1918, mGT, begin=1, end=27, range=c(0.01,50))
+plot(res)
+## no change in R with varying range
+## (dates here are the same index as before. Just to illustrate different use)
+est.R0.ML(Germany.1918, mGT, begin="1918-09-29", end="1918-10-25", range=c(0.01,100))
+# Reproduction number estimate using  Maximum Likelihood  method.
+# R :  1.307249[ 1.236913 , 1.380185 ]
+
+
+
+
